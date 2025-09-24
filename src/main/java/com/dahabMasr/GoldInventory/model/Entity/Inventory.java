@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
@@ -25,10 +26,12 @@ import java.time.LocalDateTime;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
     private  String name;
+    @Column(columnDefinition = "int default 0")
     private  Double amount;
-    private  Integer reserved;
-    private  Float weight;
+    @Column(columnDefinition = "int default 0")
+    private Integer reserved;
 
+    private  Float weight;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Type type;
@@ -41,9 +44,13 @@ import java.time.LocalDateTime;
 
     @PrePersist
     protected void onCreate() {
+        if (reserved == null) {
+            reserved = 0;
+        }
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
+
 
     @PreUpdate
     protected void onUpdate() {

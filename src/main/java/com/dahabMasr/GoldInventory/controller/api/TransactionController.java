@@ -1,0 +1,85 @@
+package com.dahabMasr.GoldInventory.controller.api;
+
+
+import com.dahabMasr.GoldInventory.model.Dto.InventoryWithCountRes;
+import com.dahabMasr.GoldInventory.model.Dto.PriceRes;
+import com.dahabMasr.GoldInventory.model.Dto.TransactionReq;
+import com.dahabMasr.GoldInventory.model.Entity.Inventory;
+import com.dahabMasr.GoldInventory.model.Mapper.Imp.TransactionMapper;
+import com.dahabMasr.GoldInventory.service.imp.InventoryService;
+import com.dahabMasr.GoldInventory.service.imp.TransactionService;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+public class TransactionController {
+
+    @Autowired
+    InventoryService inventoryService;
+    @Autowired
+    TransactionService TransactionService;
+    @Autowired
+    TransactionMapper TransactionMapper;
+
+
+    @PostMapping("create")
+    public  Result create(@RequestBody TransactionReq dto){
+        Result  result = calculate(dto.getType(), dto.getAmount());
+        TransactionReq trnas = new TransactionReq(result.amount,dto.getType());
+        TransactionService.save(TransactionMapper.toEntity(trnas));
+        return  result;
+    }
+
+
+   @Data
+   public  static class Result{
+       public List<InventoryWithCountRes> inventories;
+       public double amount;
+       public double remaining;
+   }
+
+
+   public Result calculate(String type, Double amount){
+       Result result = new Result();
+       com.dahabMasr.GoldInventory.model.Dto.PriceRes price  = new PriceRes();
+       List<Inventory> inventories = inventoryService.getInventoriesByTypeOrderDesc(type);
+       double remaining = amount;
+       List<InventoryWithCountRes> resultList = new ArrayList<>();
+       for (Inventory inv : inventories){
+
+           float pricevalue = type.equals("GOLD") ? price.getGoldBaying() : price.getSelverBaying();
+           double piecePrice = inv.getWeight() * pricevalue;
+
+
+           int count = 0;
+           while (remaining >= piecePrice){
+               count++;
+               remaining -= piecePrice;
+           }
+           if (count > 0) {
+               resultList.add(new InventoryWithCountRes(
+                       inv.getId(),
+                       inv.getName(),
+                       inv.getAmount(),
+                       inv.getReserved(),
+                       inv.getWeight(),
+                       inv.getType(),
+                       count
+               ));
+           }
+       }
+       result.remaining = remaining;
+       result.setInventories(resultList);
+       result.amount = amount - remaining;
+       return result;
+   }
+
+}

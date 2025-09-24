@@ -3,6 +3,7 @@ package com.dahabMasr.GoldInventory.model.Entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "transactions")
 public class Transaction {
 
@@ -51,6 +53,10 @@ public class Transaction {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+        if(status==null){
+            status = Status.valueOf("PENDDING");
+        }
+
     }
 
     @PreUpdate
