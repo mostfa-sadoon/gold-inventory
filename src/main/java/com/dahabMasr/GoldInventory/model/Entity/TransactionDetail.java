@@ -30,6 +30,6 @@ public class TransactionDetail {
     @JoinColumn(name = "inventory_id",nullable = false,foreignKey = @ForeignKey(name = "inventory_id"))
     private  Inventory inventory;
 
-    private double amount;
-    private double count;
+    private double quantity;
+    private double weight;
 }

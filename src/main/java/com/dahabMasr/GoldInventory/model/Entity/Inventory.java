@@ -28,7 +28,7 @@ import java.util.List;
     private  Long id;
     private  String name;
     @Column(columnDefinition = "int default 0")
-    private  Double amount;
+    private  Integer quantity;
     @Column(columnDefinition = "int default 0")
     private Integer reserved;
 

@@ -8,7 +8,7 @@ public class InventoryReq {
 
     private  Long id;
     private  String name;
-    private  Double amount;
+    private  Integer quantity;
     private  Integer reserved;
     private  Float weight;
     private  Inventory.Type type;

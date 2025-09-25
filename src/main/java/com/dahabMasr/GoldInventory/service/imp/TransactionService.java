@@ -7,6 +7,8 @@ import com.dahabMasr.GoldInventory.service.TransactionServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class TransactionService implements TransactionServiceInterface {
 
@@ -15,5 +17,9 @@ public class TransactionService implements TransactionServiceInterface {
 
     public Transaction save(Transaction entity){
         return  TransactionRepository.save(entity);
+    }
+
+    public Transaction find(Long id){
+         return TransactionRepository.findById(id).get();
     }
 }

@@ -8,4 +8,5 @@ import java.util.List;
 public interface InventoryServiceInterface {
     public  Inventory save(Inventory entity);
     public  List<Inventory> getInventoriesByTypeOrderDesc(String type);
+    public  Inventory update(Inventory entity);
 }

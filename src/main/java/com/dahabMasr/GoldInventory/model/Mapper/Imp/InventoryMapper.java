@@ -13,7 +13,7 @@ public class InventoryMapper implements InventoryMapperInterface {
         return  Inventory.builder()
                 .type(dto.getType())
                 .name(dto.getName())
-                .amount(dto.getAmount())
+                .quantity(dto.getQuantity())
                 .weight(dto.getWeight())
                 .build();
    }

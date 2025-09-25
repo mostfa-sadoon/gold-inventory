@@ -1,6 +1,7 @@
 package com.dahabMasr.GoldInventory.model.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -4,6 +4,7 @@ package com.dahabMasr.GoldInventory.controller.api;
 import com.dahabMasr.GoldInventory.model.Dto.InventoryWithCountRes;
 import com.dahabMasr.GoldInventory.model.Dto.PriceRes;
 import com.dahabMasr.GoldInventory.model.Dto.TransactionReq;
+import com.dahabMasr.GoldInventory.model.Dto.TransactionUpdateReq;
 import com.dahabMasr.GoldInventory.model.Entity.Inventory;
 import com.dahabMasr.GoldInventory.model.Entity.Transaction;
 import com.dahabMasr.GoldInventory.model.Entity.TransactionDetail;
@@ -11,8 +12,12 @@ import com.dahabMasr.GoldInventory.model.Mapper.Imp.TransactionMapper;
 import com.dahabMasr.GoldInventory.service.imp.InventoryService;
 import com.dahabMasr.GoldInventory.service.imp.TransactionDetailIService;
 import com.dahabMasr.GoldInventory.service.imp.TransactionService;
+import com.dahabMasr.GoldInventory.utility.ApiResponse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,14 +50,46 @@ public class TransactionController {
             inventory.setId(inv.getId());
             detail.setInventory(inventory);
             detail.setTransaction(transaction);
-            detail.setCount(inv.getCount());
-            detail.setAmount(inv.getCount()*inv.getWeight());
-            TransactionDetailIService.save(detail);
+            detail.setQuantity(inv.getQuantity());
+            detail.setWeight(inv.getQuantity()*inv.getWeight());
+
+            TransactionDetail transdetail =  TransactionDetailIService.save(detail);
+
+            if (transdetail.getId() != null) {
+                 inventory.setReserved(inv.getReversed() + inv.getQuantity());
+                 inventory.setType(inv.getType());
+                 inventory.setWeight(inv.getWeight());
+                 inventory.setQuantity(inv.getStock_quantity());
+                 inventory.setName(inv.getName());
+                 inventoryService.update(inventory);
+            }
+
         }
+
 
         result.transaction_id = transaction.getId();
         result.status = transaction.getStatus().toString();
         return  result;
+    }
+
+
+    @PostMapping("update")
+    public ResponseEntity<ApiResponse<Transaction>> update(@RequestBody TransactionUpdateReq dto){
+        Transaction trans = TransactionService.find(dto.getId());
+        if(trans.getId()!=null){
+            trans.setStatus(Transaction.Status.valueOf(dto.getStatus()));
+            TransactionService.save(trans);
+            ApiResponse<Transaction> response = new ApiResponse<Transaction>(
+                    "inventory addess sucessfuly",
+                    trans
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        }
+        ApiResponse<Transaction> response = new ApiResponse<>(
+                "Transaction not found with id: " + dto.getId(),
+                null
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
 
@@ -65,7 +102,7 @@ public class TransactionController {
        public String status;
    }
 
-
+   // this function responsible for algorithm that calculate  quantity of pieces that user will take
    public Result calculate(String type, Double amount){
        Result result = new Result();
        com.dahabMasr.GoldInventory.model.Dto.PriceRes price  = new PriceRes();
@@ -88,8 +125,10 @@ public class TransactionController {
                        inv.getId(),
                        inv.getName(),
                        inv.getWeight(),
+                       inv.getReserved(),
                        inv.getType(),
-                       count
+                       count,
+                       inv.getQuantity()
                ));
            }
        }

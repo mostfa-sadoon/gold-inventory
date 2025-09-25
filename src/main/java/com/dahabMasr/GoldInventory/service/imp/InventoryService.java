@@ -26,4 +26,8 @@ public class InventoryService implements InventoryServiceInterface {
                 Sort.by(Sort.Direction.DESC, "weight")
         );
     }
+
+    public  Inventory update(Inventory entity){
+       return InventoryRepository.save(entity);
+    }
 }
