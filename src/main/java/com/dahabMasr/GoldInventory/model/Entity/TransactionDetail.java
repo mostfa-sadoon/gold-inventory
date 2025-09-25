@@ -25,4 +25,11 @@ public class TransactionDetail {
     )
     private Transaction transaction;
 
+
+    @ManyToOne
+    @JoinColumn(name = "inventory_id",nullable = false,foreignKey = @ForeignKey(name = "inventory_id"))
+    private  Inventory inventory;
+
+    private double amount;
+    private double count;
 }

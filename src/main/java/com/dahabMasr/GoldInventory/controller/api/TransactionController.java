@@ -39,13 +39,19 @@ public class TransactionController {
         Result  result = calculate(dto.getType(), dto.getAmount());
         TransactionReq trnas =  new TransactionReq(result.amount , dto.getType(), dto.getCustomer());
         Transaction transaction =  TransactionService.save(TransactionMapper.toEntity(trnas));
-//        TransactionDetail detail = new TransactionDetail(transaction);
-//        TransactionDetailIService.save(detail);
-
+        for (InventoryWithCountRes inv : result.inventories){
+            TransactionDetail detail = new TransactionDetail();
+            Inventory inventory = new Inventory();
+            inventory.setId(inv.getId());
+            detail.setInventory(inventory);
+            detail.setTransaction(transaction);
+            detail.setCount(inv.getCount());
+            detail.setAmount(inv.getCount()*inv.getWeight());
+            TransactionDetailIService.save(detail);
+        }
 
         result.transaction_id = transaction.getId();
-
-
+        result.status = transaction.getStatus().toString();
         return  result;
     }
 
@@ -55,7 +61,8 @@ public class TransactionController {
        public List<InventoryWithCountRes> inventories;
        public double amount;
        public double remaining;
-       public double transaction_id;
+       public Long transaction_id;
+       public String status;
    }
 
 
@@ -80,8 +87,6 @@ public class TransactionController {
                resultList.add(new InventoryWithCountRes(
                        inv.getId(),
                        inv.getName(),
-                       inv.getAmount(),
-                       inv.getReserved(),
                        inv.getWeight(),
                        inv.getType(),
                        count
