@@ -5,8 +5,11 @@ import com.dahabMasr.GoldInventory.model.Dto.InventoryWithCountRes;
 import com.dahabMasr.GoldInventory.model.Dto.PriceRes;
 import com.dahabMasr.GoldInventory.model.Dto.TransactionReq;
 import com.dahabMasr.GoldInventory.model.Entity.Inventory;
+import com.dahabMasr.GoldInventory.model.Entity.Transaction;
+import com.dahabMasr.GoldInventory.model.Entity.TransactionDetail;
 import com.dahabMasr.GoldInventory.model.Mapper.Imp.TransactionMapper;
 import com.dahabMasr.GoldInventory.service.imp.InventoryService;
+import com.dahabMasr.GoldInventory.service.imp.TransactionDetailIService;
 import com.dahabMasr.GoldInventory.service.imp.TransactionService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +31,21 @@ public class TransactionController {
     TransactionService TransactionService;
     @Autowired
     TransactionMapper TransactionMapper;
-
+    @Autowired
+    TransactionDetailIService TransactionDetailIService;
 
     @PostMapping("create")
     public  Result create(@RequestBody TransactionReq dto){
         Result  result = calculate(dto.getType(), dto.getAmount());
-        TransactionReq trnas = new TransactionReq(result.amount,dto.getType());
-        TransactionService.save(TransactionMapper.toEntity(trnas));
+        TransactionReq trnas =  new TransactionReq(result.amount , dto.getType(), dto.getCustomer());
+        Transaction transaction =  TransactionService.save(TransactionMapper.toEntity(trnas));
+//        TransactionDetail detail = new TransactionDetail(transaction);
+//        TransactionDetailIService.save(detail);
+
+
+        result.transaction_id = transaction.getId();
+
+
         return  result;
     }
 
@@ -44,6 +55,7 @@ public class TransactionController {
        public List<InventoryWithCountRes> inventories;
        public double amount;
        public double remaining;
+       public double transaction_id;
    }
 
 
