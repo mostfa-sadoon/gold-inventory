@@ -1,6 +1,7 @@
 package com.dahabMasr.GoldInventory.model.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,6 +45,7 @@ import java.util.List;
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "inventory")
+    @JsonManagedReference
     private List<TransactionDetail> details;
 
     @PrePersist

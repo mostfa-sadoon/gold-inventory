@@ -1,6 +1,8 @@
 package com.dahabMasr.GoldInventory.model.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,15 +36,6 @@ public class Transaction {
 
     private  Double amount;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "customer_id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "customer_id") // gives your FK a nice name
-    )
-    private Customer customer;
-
-
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
@@ -65,5 +58,15 @@ public class Transaction {
     }
 
     @OneToMany(mappedBy = "transaction")
+    @JsonManagedReference
     private   List<TransactionDetail> detailes;
+
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(
+            name = "customer_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "customer_id") // gives your FK a nice name
+    )
+    private Customer customer;
 }

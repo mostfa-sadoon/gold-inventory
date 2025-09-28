@@ -2,6 +2,7 @@ package com.dahabMasr.GoldInventory.model.Entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,5 +23,6 @@ public class Customer {
     private  String email;
 
     @OneToMany(mappedBy = "customer")
+    @JsonManagedReference
     private List<Transaction> transactions;
 }

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class InventoryService implements InventoryServiceInterface {
@@ -29,5 +30,9 @@ public class InventoryService implements InventoryServiceInterface {
 
     public  Inventory update(Inventory entity){
        return InventoryRepository.save(entity);
+    }
+
+    public Optional<Inventory>find(Long id){
+       return InventoryRepository.findById(id);
     }
 }

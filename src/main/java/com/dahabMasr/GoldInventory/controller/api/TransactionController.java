@@ -22,10 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class TransactionController {
@@ -41,7 +38,7 @@ public class TransactionController {
 
     @PostMapping("create")
     public  Result create(@RequestBody TransactionReq dto){
-        Result  result = calculate(dto.getType(), dto.getAmount());
+        Result  result = TransactionService.calculate(dto.getType(), dto.getAmount());
         TransactionReq trnas =  new TransactionReq(result.amount , dto.getType(), dto.getCustomer());
         Transaction transaction =  TransactionService.save(TransactionMapper.toEntity(trnas));
         for (InventoryWithCountRes inv : result.inventories){
@@ -65,8 +62,6 @@ public class TransactionController {
             }
 
         }
-
-
         result.transaction_id = transaction.getId();
         result.status = transaction.getStatus().toString();
         return  result;
@@ -75,12 +70,26 @@ public class TransactionController {
 
     @PostMapping("update")
     public ResponseEntity<ApiResponse<Transaction>> update(@RequestBody TransactionUpdateReq dto){
-        Transaction trans = TransactionService.find(dto.getId());
-        if(trans.getId()!=null){
+        Optional<Transaction> Optionaltrans = TransactionService.find(dto.getId());
+
+        if(Optionaltrans.isPresent()){
+            Transaction trans  =  Optionaltrans.get();
             trans.setStatus(Transaction.Status.valueOf(dto.getStatus()));
             TransactionService.save(trans);
+            List<TransactionDetail> detailes = TransactionDetailIService.findAll(trans.getId());
+
+            for(TransactionDetail detail : detailes){
+                 Optional<Inventory> invOpt = inventoryService.find(detail.getInventory().getId());
+                 if (invOpt.isPresent()){
+                     Inventory inv = invOpt.get();
+                     inv.setQuantity(inv.getQuantity() - detail.getQuantity());
+                     inv.setReserved(inv.getReserved() - detail.getQuantity());
+                     inventoryService.save(inv);
+                 }
+            }
+
             ApiResponse<Transaction> response = new ApiResponse<Transaction>(
-                    "inventory addess sucessfuly",
+                    "Transaction updated successfuly",
                     trans
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -100,42 +109,6 @@ public class TransactionController {
        public double remaining;
        public Long transaction_id;
        public String status;
-   }
-
-   // this function responsible for algorithm that calculate  quantity of pieces that user will take
-   public Result calculate(String type, Double amount){
-       Result result = new Result();
-       com.dahabMasr.GoldInventory.model.Dto.PriceRes price  = new PriceRes();
-       List<Inventory> inventories = inventoryService.getInventoriesByTypeOrderDesc(type);
-       double remaining = amount;
-       List<InventoryWithCountRes> resultList = new ArrayList<>();
-       for (Inventory inv : inventories){
-
-           float pricevalue = type.equals("GOLD") ? price.getGoldBaying() : price.getSelverBaying();
-           double piecePrice = inv.getWeight() * pricevalue;
-
-
-           int count = 0;
-           while (remaining >= piecePrice){
-               count++;
-               remaining -= piecePrice;
-           }
-           if (count > 0) {
-               resultList.add(new InventoryWithCountRes(
-                       inv.getId(),
-                       inv.getName(),
-                       inv.getWeight(),
-                       inv.getReserved(),
-                       inv.getType(),
-                       count,
-                       inv.getQuantity()
-               ));
-           }
-       }
-       result.remaining = remaining;
-       result.setInventories(resultList);
-       result.amount = amount - remaining;
-       return result;
    }
 
 }

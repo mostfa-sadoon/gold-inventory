@@ -6,6 +6,8 @@ import com.dahabMasr.GoldInventory.service.TransactionDetailInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TransactionDetailIService implements TransactionDetailInterface {
 
@@ -15,4 +17,9 @@ public class TransactionDetailIService implements TransactionDetailInterface {
   public TransactionDetail save(TransactionDetail entity){
        return  TransactionDetailRepository.save(entity);
   }
+
+  public   List<TransactionDetail> findAll(Long id){
+      return TransactionDetailRepository.findAllByTransaction_Id(id);
+  }
+
 }
