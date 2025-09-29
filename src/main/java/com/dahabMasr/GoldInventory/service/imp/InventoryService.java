@@ -23,7 +23,11 @@ public class InventoryService implements InventoryServiceInterface {
 
     public List<Inventory> getInventoriesByTypeOrderDesc(String type) {
         return InventoryRepository.findAll(
-                (root, query, cb) -> cb.equal(root.get("type"), type),
+                (root, query, cb) -> cb.and(
+                        cb.equal(root.get("type"), type),
+                        cb.greaterThan(root.get("quantity"), 0),
+                        cb.lessThan(root.get("reserved"), root.get("quantity"))
+                ),
                 Sort.by(Sort.Direction.DESC, "weight")
         );
     }
