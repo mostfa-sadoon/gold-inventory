@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin}">
+<head>
+    <title>Transactions</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Transactions</li>
+        </ol>
+    </nav>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Transaction Id</th>
+            <th scope="col">amount</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="trans : ${transactions}">
+            <td th:text="${trans.id}"></td>
+            <td th:text="${trans.amount}"></td>
+            <td th:text="${trans.status}"></td>
+            <td th:id="'td_action_' + ${trans.id}">
+                <button   th:attr="data-id=${trans.id}" class="btn btn-primary accept_button"
+                        th:if="${trans.status == T(com.dahabMasr.GoldInventory.model.Entity.Transaction.Status).PENDDING}">
+                    Accept
+                </button>
+                <button  th:attr="data-id=${trans.id}" class="btn btn-danger cancel_button"
+                        th:if="${trans.status == T(com.dahabMasr.GoldInventory.model.Entity.Transaction.Status).PENDDING}">
+                    Cancel
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <!-- Pagination controls -->
+    <div>
+        <ul class="pagination">
+            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a th:href="@{/admin/transactions(page=${i}, size=20)}"
+                   th:text="${i + 1}"></a>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<section layout:fragment="scripts">
+    <script>
+        // accept transaction
+        $('.accept_button').click(function(){
+            let id = $(this).data("id");
+            if (confirm("Are you sure you want to mark transaction " + id + " as COMPLETED?")) {
+                $.ajax({
+                   url: "http://localhost:8080/update",
+                   type: "POST",
+                   contentType: "application/json",
+                    data: JSON.stringify({
+                        id: id,
+                        status: "COMPLETED"
+                    }),
+                    success: function (response) {
+                        console.log("✅ Transaction updated:", response);
+                        $("#td_action_" + id).empty();
+                    },
+                    error: function (xhr) {
+                        console.error("❌ Error:", xhr.responseText);
+                    }
+                });
+            }
+        });
+        // canceled transactions
+         $('.cancel_button').click(function(){
+            let id = $(this).data("id");
+            if (confirm("Are you sure you want to mark transaction " + id + " as Canceled?")) {
+                $.ajax({
+                   url: "http://localhost:8080/update",
+                   type: "POST",
+                   contentType: "application/json",
+                    data: JSON.stringify({
+                        id: id,
+                        status: "CANCELD"
+                    }),
+                    success: function (response) {
+                        console.log("✅ Transaction updated:", response);
+                        $("#td_action_" + id).empty();
+                    },
+                    error: function (xhr) {
+                        console.error("❌ Error:", xhr.responseText);
+                    }
+                });
+            }
+        });
+    </script>
+</section>
+
+
+
+</body>
+</html>

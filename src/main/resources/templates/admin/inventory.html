@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin}">
+<head>
+    <title>Inventories</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Inventories</li>
+        </ol>
+    </nav>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Inventory Id</th>
+            <th scope="col">name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Weight</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="inventory : ${inventories}">
+            <td th:text="${inventory.id}"></td>
+            <td th:text="${inventory.name}"></td>
+            <td th:text="${inventory.status}"></td>
+            <td th:id="'td_action_' + ${inventory.id}">
+                <button   th:attr="data-id=${inventory.id}" class="btn btn-primary accept_button"
+                          th:if="${inventory.status == T(com.dahabMasr.GoldInventory.model.Entity.Transaction.Status).PENDDING}">
+                    Accept
+                </button>
+                <button  th:attr="data-id=${inventory.id}" class="btn btn-danger cancel_button"
+                         th:if="${inventory.status == T(com.dahabMasr.GoldInventory.model.Entity.Transaction.Status).PENDDING}">
+                    Cancel
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <!-- Pagination controls -->
+    <div>
+        <ul class="pagination">
+            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a th:href="@{/admin/inventories(page=${i}, size=20)}"
+                   th:text="${i + 1}"></a>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<section layout:fragment="scripts">
+   
+</section>
+
+
+
+</body>
+</html>

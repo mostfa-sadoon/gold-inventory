@@ -13,6 +13,9 @@ import com.dahabMasr.GoldInventory.model.Mapper.Imp.TransactionMapper;
 import com.dahabMasr.GoldInventory.repository.TransactionRepository;
 import com.dahabMasr.GoldInventory.service.TransactionServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,6 +40,11 @@ public class TransactionService implements TransactionServiceInterface {
 
     public Optional<Transaction> find(Long id){
          return TransactionRepository.findById(id);
+    }
+
+    public Page<Transaction> findPaginated(int page, int size){
+        Pageable pageable = PageRequest.of(page,size);
+        return  TransactionRepository.findAllByOrderByIdDesc(pageable);
     }
 
 
