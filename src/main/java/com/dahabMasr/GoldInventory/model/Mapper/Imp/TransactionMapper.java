@@ -25,8 +25,8 @@ public class TransactionMapper implements TransactionMapperInterface {
                  .build();
     }
 
-    public TransactionRes toResponse(Transaction entity){
-        return  TransactionRes.builder()
-    }
+//    public TransactionRes toResponse(Transaction entity){
+//        return  TransactionRes.builder()
+//    }
 
 }

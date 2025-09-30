@@ -7,5 +7,5 @@ import com.dahabMasr.GoldInventory.model.Entity.Transaction;
 public interface TransactionMapperInterface {
 
   public Transaction toEntity(TransactionReq dto);
-  public TransactionRes toResponse(Transaction entity);
+//  public TransactionRes toResponse(Transaction entity);
 }
