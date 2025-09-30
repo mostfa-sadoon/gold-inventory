@@ -14,33 +14,39 @@
         </ol>
     </nav>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">Inventory Id</th>
-            <th scope="col">name</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Weight</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="inventory : ${inventories}">
-            <td th:text="${inventory.id}"></td>
-            <td th:text="${inventory.name}"></td>
-            <td th:text="${inventory.status}"></td>
-            <td th:id="'td_action_' + ${inventory.id}">
-                <button   th:attr="data-id=${inventory.id}" class="btn btn-primary accept_button"
-                          th:if="${inventory.status == T(com.dahabMasr.GoldInventory.model.Entity.Transaction.Status).PENDDING}">
-                    Accept
-                </button>
-                <button  th:attr="data-id=${inventory.id}" class="btn btn-danger cancel_button"
-                         th:if="${inventory.status == T(com.dahabMasr.GoldInventory.model.Entity.Transaction.Status).PENDDING}">
-                    Cancel
-                </button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+
+
+    <div class="card">
+        <div class="card-header">
+            Inventories
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Inventory Id</th>
+                    <th scope="col">name</th>
+                    <th scope="col">Weight</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">reserved</th>
+                    <th scope="col">Type</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="inventory : ${inventories}">
+                    <td th:text="${inventory.id}"></td>
+                    <td th:text="${inventory.name}"></td>
+                    <td th:text="${inventory.weight}"></td>
+                    <td th:text="${inventory.quantity}"></td>
+                    <td th:text="${inventory.reserved}"></td>
+                    <td th:text="${inventory.type}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
 
 
     <!-- Pagination controls -->

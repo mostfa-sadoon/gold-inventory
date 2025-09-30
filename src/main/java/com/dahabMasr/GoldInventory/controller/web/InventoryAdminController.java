@@ -21,9 +21,9 @@ public class InventoryAdminController {
     @GetMapping("inventories")
     public  String inventorirs(@RequestParam(defaultValue = "0") int page , @RequestParam(defaultValue = "20") int size , Model model){
         Page<Inventory> inventorypage = InventoryService.findPaginated(page, size);
-        model.addAttribute("transactions", inventorypage.getContent()); // actual data
+        model.addAttribute("inventories", inventorypage.getContent()); // actual data
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", inventorypage.getTotalPages());
-        return "admin/Inventory";
+        return "admin/inventory";
     }
 }

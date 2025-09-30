@@ -14,33 +14,97 @@
         </ol>
     </nav>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">Transaction Id</th>
-            <th scope="col">amount</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="trans : ${transactions}">
-            <td th:text="${trans.id}"></td>
-            <td th:text="${trans.amount}"></td>
-            <td th:text="${trans.status}"></td>
-            <td th:id="'td_action_' + ${trans.id}">
-                <button   th:attr="data-id=${trans.id}" class="btn btn-primary accept_button"
-                        th:if="${trans.status == T(com.dahabMasr.GoldInventory.model.Entity.Transaction.Status).PENDDING}">
-                    Accept
-                </button>
-                <button  th:attr="data-id=${trans.id}" class="btn btn-danger cancel_button"
-                        th:if="${trans.status == T(com.dahabMasr.GoldInventory.model.Entity.Transaction.Status).PENDDING}">
-                    Cancel
-                </button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="card">
+        <div class="card-header">
+            Transactions
+        </div>
+        <div class="card-body">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Transaction Id</th>
+                    <th scope="col">amount</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="trans : ${transactions}">
+                    <td th:text="${trans.id}"></td>
+                    <td th:text="${trans.amount}"></td>
+                    <td th:text="${trans.status}"></td>
+                    <td th:id="'td_action_' + ${trans.id}">
+                        <button   th:attr="data-id=${trans.id}" class="btn btn-primary accept_button"
+                                  th:if="${trans.status == T(com.dahabMasr.GoldInventory.model.Entity.Transaction.Status).PENDDING}">
+                            Accept
+                        </button>
+                        <button  th:attr="data-id=${trans.id}" class="btn btn-danger cancel_button"
+                                 th:if="${trans.status == T(com.dahabMasr.GoldInventory.model.Entity.Transaction.Status).PENDDING}">
+                            Cancel
+                        </button>
+
+
+                        <button  th:attr="data-id=${trans.id}" class="btn btn-success show_button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            show
+                        </button>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Transaction Detailes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+
+                    <table class="table" id="transactionDetailsTable">
+                        <thead>
+                        <tr>
+                            <th scope="col">Transaction Id</th>
+                            <th scope="col">name</th>
+                            <th scope="col">weight</th>
+                            <th scope="col">quantity</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr >
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+<!--                    <button type="button" class="btn btn-primary">Save changes</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <!-- Pagination controls -->
@@ -57,51 +121,84 @@
 
 <section layout:fragment="scripts">
     <script>
-        // accept transaction
-        $('.accept_button').click(function(){
+       // accept transaction
+       $('.accept_button').click(function(){
+           let id = $(this).data("id");
+           if (confirm("Are you sure you want to mark transaction " + id + " as COMPLETED?")) {
+               $.ajax({
+                  url: "http://localhost:8080/update",
+                  type: "POST",
+                  contentType: "application/json",
+                   data: JSON.stringify({
+                       id: id,
+                       status: "COMPLETED"
+                   }),
+                   success: function (response) {
+                       $("#td_action_" + id).empty();
+                   },
+                   error: function (xhr) {
+                       console.error("❌ Error:", xhr.responseText);
+                   }
+               });
+           }
+       });
+       // canceled transactions
+        $('.cancel_button').click(function(){
+           let id = $(this).data("id");
+           if (confirm("Are you sure you want to mark transaction " + id + " as Canceled?")) {
+               $.ajax({
+                  url: "http://localhost:8080/update",
+                  type: "POST",
+                  contentType: "application/json",
+                   data: JSON.stringify({
+                       id: id,
+                       status: "CANCELD"
+                   }),
+                   success: function (response) {
+                       $("#td_action_" + id).empty();
+                   },
+                   error: function (xhr) {
+                       console.error("❌ Error:", xhr.responseText);
+                   }
+               });
+           }
+       });
+
+        // show button
+
+        $('.show_button').click(function(){
             let id = $(this).data("id");
-            if (confirm("Are you sure you want to mark transaction " + id + " as COMPLETED?")) {
-                $.ajax({
-                   url: "http://localhost:8080/update",
-                   type: "POST",
-                   contentType: "application/json",
-                    data: JSON.stringify({
-                        id: id,
-                        status: "COMPLETED"
-                    }),
-                    success: function (response) {
-                        console.log("✅ Transaction updated:", response);
-                        $("#td_action_" + id).empty();
-                    },
-                    error: function (xhr) {
-                        console.error("❌ Error:", xhr.responseText);
-                    }
-                });
-            }
-        });
-        // canceled transactions
-         $('.cancel_button').click(function(){
-            let id = $(this).data("id");
-            if (confirm("Are you sure you want to mark transaction " + id + " as Canceled?")) {
-                $.ajax({
-                   url: "http://localhost:8080/update",
-                   type: "POST",
-                   contentType: "application/json",
-                    data: JSON.stringify({
-                        id: id,
-                        status: "CANCELD"
-                    }),
-                    success: function (response) {
-                        console.log("✅ Transaction updated:", response);
-                        $("#td_action_" + id).empty();
-                    },
-                    error: function (xhr) {
-                        console.error("❌ Error:", xhr.responseText);
-                    }
-                });
-            }
+
+            $.ajax({
+                  url: "http://localhost:8080/transaction-detailes",
+                  type: "GET",
+                  contentType: "application/json",
+                   data: { id: 67 },
+                   success: function (response) {
+                       console.log(response.data.detailes[0].id);
+                       for(let detail of response.data.detailes){
+                            let row = `
+                            <tr>
+                                <td>${detail.id}</td>
+                                <td>${detail.quantity}</td>
+                                <td>${detail.quantity}</td>
+                                <td>${detail.weight}</td>
+                            </tr>
+                        `;
+
+                        $("#transactionDetailsTable tbody").append(row);
+                   }
+
+                   },
+                   error: function (xhr) {
+                       console.error("❌ Error:", xhr.responseText);
+                   }
+            });
+
         });
     </script>
+
+
 </section>
 
 
