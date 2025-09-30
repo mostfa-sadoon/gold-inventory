@@ -1,6 +1,5 @@
 package com.dahabMasr.GoldInventory.service.imp;
 
-import com.dahabMasr.GoldInventory.model.Dto.InventoryReq;
 import com.dahabMasr.GoldInventory.model.Entity.Inventory;
 import com.dahabMasr.GoldInventory.repository.InventoryRepository;
 import com.dahabMasr.GoldInventory.service.InventoryServiceInterface;

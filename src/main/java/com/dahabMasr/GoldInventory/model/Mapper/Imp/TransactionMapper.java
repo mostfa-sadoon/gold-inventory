@@ -1,5 +1,6 @@
 package com.dahabMasr.GoldInventory.model.Mapper.Imp;
 
+import com.dahabMasr.GoldInventory.model.Dto.Res.TransactionRes;
 import com.dahabMasr.GoldInventory.model.Dto.TransactionReq;
 import com.dahabMasr.GoldInventory.model.Entity.Customer;
 import com.dahabMasr.GoldInventory.model.Entity.Transaction;
@@ -22,6 +23,10 @@ public class TransactionMapper implements TransactionMapperInterface {
                  .amount(req.getAmount())
                  .customer(customer)
                  .build();
+    }
+
+    public TransactionRes toResponse(Transaction entity){
+        return  TransactionRes.builder()
     }
 
 }

@@ -4,7 +4,7 @@ import com.dahabMasr.GoldInventory.controller.api.TransactionController;
 import com.dahabMasr.GoldInventory.exception.InventoryNotFoundException;
 import com.dahabMasr.GoldInventory.exception.TransactionNotFoundException;
 import com.dahabMasr.GoldInventory.model.Dto.InventoryWithCountRes;
-import com.dahabMasr.GoldInventory.model.Dto.PriceRes;
+import com.dahabMasr.GoldInventory.model.Dto.Res.PriceRes;
 import com.dahabMasr.GoldInventory.model.Dto.TransactionReq;
 import com.dahabMasr.GoldInventory.model.Entity.Inventory;
 import com.dahabMasr.GoldInventory.model.Entity.Transaction;

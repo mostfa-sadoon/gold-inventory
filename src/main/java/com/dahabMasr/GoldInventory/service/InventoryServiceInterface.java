@@ -1,9 +1,7 @@
 package com.dahabMasr.GoldInventory.service;
 
-import com.dahabMasr.GoldInventory.model.Dto.InventoryReq;
 import com.dahabMasr.GoldInventory.model.Entity.Inventory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;

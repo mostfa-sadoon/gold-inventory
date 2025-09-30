@@ -1,4 +1,4 @@
-package com.dahabMasr.GoldInventory.model.Dto;
+package com.dahabMasr.GoldInventory.model.Dto.Res;
 
 
 import lombok.AllArgsConstructor;

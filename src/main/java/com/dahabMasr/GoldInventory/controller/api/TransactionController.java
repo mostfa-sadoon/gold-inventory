@@ -2,18 +2,14 @@ package com.dahabMasr.GoldInventory.controller.api;
 
 
 import com.dahabMasr.GoldInventory.model.Dto.InventoryWithCountRes;
-import com.dahabMasr.GoldInventory.model.Dto.PriceRes;
 import com.dahabMasr.GoldInventory.model.Dto.TransactionReq;
 import com.dahabMasr.GoldInventory.model.Dto.TransactionUpdateReq;
-import com.dahabMasr.GoldInventory.model.Entity.Inventory;
 import com.dahabMasr.GoldInventory.model.Entity.Transaction;
-import com.dahabMasr.GoldInventory.model.Entity.TransactionDetail;
 import com.dahabMasr.GoldInventory.model.Mapper.Imp.TransactionMapper;
 import com.dahabMasr.GoldInventory.service.imp.InventoryService;
 import com.dahabMasr.GoldInventory.service.imp.TransactionDetailIService;
 import com.dahabMasr.GoldInventory.service.imp.TransactionService;
 import com.dahabMasr.GoldInventory.utility.ApiResponse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.Valid;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
