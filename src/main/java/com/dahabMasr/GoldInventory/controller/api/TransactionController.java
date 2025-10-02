@@ -2,6 +2,7 @@ package com.dahabMasr.GoldInventory.controller.api;
 
 
 import com.dahabMasr.GoldInventory.model.Dto.InventoryWithCountRes;
+import com.dahabMasr.GoldInventory.model.Dto.Res.TransactionRes;
 import com.dahabMasr.GoldInventory.model.Dto.TransactionReq;
 import com.dahabMasr.GoldInventory.model.Dto.TransactionUpdateReq;
 import com.dahabMasr.GoldInventory.model.Entity.Transaction;
@@ -53,11 +54,13 @@ public class TransactionController {
     }
 
     @GetMapping("transaction-detailes")
-    public  ResponseEntity<ApiResponse<Transaction>> getDetailes(@RequestParam() Long id){
+    public  ResponseEntity<ApiResponse<TransactionRes>> getDetailes(@RequestParam() Long id){
+        System.out.println(id);
         Optional<Transaction> trans = TransactionService.find(id);
-        ApiResponse<Transaction> response = new ApiResponse<Transaction>(
+        TransactionRes transaction = TransactionMapper.toResponse(trans.get());
+        ApiResponse<TransactionRes> response = new ApiResponse<TransactionRes>(
                 "get Transaction success",
-                trans.get()
+                transaction
         );
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

@@ -173,14 +173,14 @@
                   url: "http://localhost:8080/transaction-detailes",
                   type: "GET",
                   contentType: "application/json",
-                   data: { id: 67 },
+                   data: { id: id },
                    success: function (response) {
-                       console.log(response.data.detailes[0].id);
-                       for(let detail of response.data.detailes){
+                       for(let detail of response.data.transactionDetailRes){
+                            console.log(detail);
                             let row = `
                             <tr>
                                 <td>${detail.id}</td>
-                                <td>${detail.quantity}</td>
+                                <td>${detail.inventoryRes.name}</td>
                                 <td>${detail.quantity}</td>
                                 <td>${detail.weight}</td>
                             </tr>
