@@ -1,7 +1,7 @@
 package com.dahabMasr.GoldInventory.controller.api;
 
 
-import com.dahabMasr.GoldInventory.model.Dto.InventoryWithCountRes;
+import com.dahabMasr.GoldInventory.model.Dto.Res.InventoryWithCountRes;
 import com.dahabMasr.GoldInventory.model.Dto.Res.TransactionRes;
 import com.dahabMasr.GoldInventory.model.Dto.TransactionReq;
 import com.dahabMasr.GoldInventory.model.Dto.TransactionUpdateReq;
@@ -72,6 +72,7 @@ public class TransactionController {
        public double remaining;
        public Long transaction_id;
        public String status;
+       public float price;
    }
 
 }

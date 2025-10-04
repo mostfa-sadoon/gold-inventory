@@ -26,6 +26,13 @@ public class Transaction {
         CANCELD
     }
 
+    public enum Type{
+        buying,
+        sale
+    }
+    @Column(columnDefinition = "float default 0.0")
+    private Float pricing;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
@@ -33,6 +40,11 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Type type;
 
     private  Double amount;
 

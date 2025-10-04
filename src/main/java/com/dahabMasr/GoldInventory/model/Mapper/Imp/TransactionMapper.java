@@ -27,6 +27,8 @@ public class TransactionMapper implements TransactionMapperInterface {
          return  Transaction.builder()
                  .amount(req.getAmount())
                  .customer(customer)
+                 .type(Transaction.Type.valueOf(req.getTrans_type()))
+                 .pricing(req.getPrice())
                  .build();
     }
 

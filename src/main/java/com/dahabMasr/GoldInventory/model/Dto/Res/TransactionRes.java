@@ -17,5 +17,5 @@ public class TransactionRes {
   private  Long id;
   private  Double amount;
   private  Transaction.Status status;
-  private List<TransactionDetailRes> TransactionDetailRes;
+  private  List<TransactionDetailRes> TransactionDetailRes;
 }

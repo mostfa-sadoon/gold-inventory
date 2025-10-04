@@ -21,4 +21,6 @@ public class TransactionReq {
      private  String type;
      @NotNull()
      private  Long customer;
+     private  String trans_type;
+     private float price;
 }

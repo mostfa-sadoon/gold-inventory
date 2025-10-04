@@ -26,6 +26,7 @@
                     <th scope="col">Transaction Id</th>
                     <th scope="col">amount</th>
                     <th scope="col">Status</th>
+                    <th scope="col">pricing</th>
                     <th scope="col">Action</th>
                 </tr>
                 </thead>
@@ -34,6 +35,7 @@
                     <td th:text="${trans.id}"></td>
                     <td th:text="${trans.amount}"></td>
                     <td th:text="${trans.status}"></td>
+                    <td th:text="${trans.pricing}"></td>
                     <td th:id="'td_action_' + ${trans.id}">
                         <button   th:attr="data-id=${trans.id}" class="btn btn-primary accept_button"
                                   th:if="${trans.status == T(com.dahabMasr.GoldInventory.model.Entity.Transaction.Status).PENDDING}">

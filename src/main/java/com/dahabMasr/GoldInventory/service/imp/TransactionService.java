@@ -3,7 +3,7 @@ package com.dahabMasr.GoldInventory.service.imp;
 import com.dahabMasr.GoldInventory.controller.api.TransactionController;
 import com.dahabMasr.GoldInventory.exception.InventoryNotFoundException;
 import com.dahabMasr.GoldInventory.exception.TransactionNotFoundException;
-import com.dahabMasr.GoldInventory.model.Dto.InventoryWithCountRes;
+import com.dahabMasr.GoldInventory.model.Dto.Res.InventoryWithCountRes;
 import com.dahabMasr.GoldInventory.model.Dto.Res.PriceRes;
 import com.dahabMasr.GoldInventory.model.Dto.TransactionReq;
 import com.dahabMasr.GoldInventory.model.Entity.Inventory;
@@ -50,7 +50,7 @@ public class TransactionService implements TransactionServiceInterface {
 
     public  TransactionController.Result create(TransactionReq dto){
         TransactionController.Result result = this.calculate(dto.getType(), dto.getAmount());
-        TransactionReq trnas =  new TransactionReq(result.amount , dto.getType(), dto.getCustomer());
+        TransactionReq trnas =  new TransactionReq(result.amount , dto.getType(), dto.getCustomer(),dto.getTrans_type(),result.price);
         Transaction transaction =  this.save(TransactionMapper.toEntity(trnas));
         for (InventoryWithCountRes inv : result.inventories){
             TransactionDetail detail = new TransactionDetail();
@@ -109,8 +109,9 @@ public class TransactionService implements TransactionServiceInterface {
         double remaining = amount;
         List<InventoryWithCountRes> resultList = new ArrayList<>();
 
+        float priceValue = type.equals("GOLD") ? price.getGoldBaying() : price.getSelverBaying();
+
         for (Inventory inv : inventories) {
-            float priceValue = type.equals("GOLD") ? price.getGoldBaying() : price.getSelverBaying();
             double piecePrice = inv.getWeight() * priceValue;
 
             int count = 0;
@@ -137,6 +138,7 @@ public class TransactionService implements TransactionServiceInterface {
         result.remaining = remaining;
         result.setInventories(resultList);
         result.amount = amount - remaining;
+        result.price = priceValue;
         return result;
     }
 }
