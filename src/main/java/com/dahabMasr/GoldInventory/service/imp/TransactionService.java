@@ -12,6 +12,7 @@ import com.dahabMasr.GoldInventory.model.Entity.TransactionDetail;
 import com.dahabMasr.GoldInventory.model.Mapper.Imp.TransactionMapper;
 import com.dahabMasr.GoldInventory.repository.TransactionRepository;
 import com.dahabMasr.GoldInventory.service.TransactionServiceInterface;
+import groovy.util.logging.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@lombok.extern.slf4j.Slf4j
 @Service
+@Slf4j
 public class TransactionService implements TransactionServiceInterface {
 
     @Autowired
@@ -86,7 +89,7 @@ public class TransactionService implements TransactionServiceInterface {
         for (TransactionDetail detail : details) {
             Inventory inv = InventoryService.find(detail.getInventory().getId())
                     .orElseThrow(() -> new RuntimeException("Inventory not found with id: " + detail.getInventory().getId()));
-            if(status=="COMPLETED"){
+            if(status.equals("COMPLETED")){
                 inv.setQuantity(inv.getQuantity() - detail.getQuantity());
                 inv.setReserved(inv.getReserved() - detail.getQuantity());
             }else {

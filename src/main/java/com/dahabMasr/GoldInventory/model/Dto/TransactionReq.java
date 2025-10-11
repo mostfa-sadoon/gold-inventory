@@ -2,6 +2,7 @@ package com.dahabMasr.GoldInventory.model.Dto;
 
 
 import com.dahabMasr.GoldInventory.model.Entity.Customer;
+import com.dahabMasr.GoldInventory.model.Entity.Transaction;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

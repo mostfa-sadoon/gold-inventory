@@ -2,6 +2,7 @@ package com.dahabMasr.GoldInventory.controller.web;
 
 import com.dahabMasr.GoldInventory.model.Entity.Transaction;
 import com.dahabMasr.GoldInventory.service.imp.TransactionService;
+import groovy.util.logging.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;

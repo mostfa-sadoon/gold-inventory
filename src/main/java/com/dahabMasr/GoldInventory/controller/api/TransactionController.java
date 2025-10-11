@@ -11,6 +11,7 @@ import com.dahabMasr.GoldInventory.service.imp.InventoryService;
 import com.dahabMasr.GoldInventory.service.imp.TransactionDetailIService;
 import com.dahabMasr.GoldInventory.service.imp.TransactionService;
 import com.dahabMasr.GoldInventory.utility.ApiResponse;
+import groovy.util.logging.Slf4j;
 import jakarta.validation.Valid;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+@lombok.extern.slf4j.Slf4j
 @RestController
+@Slf4j
 public class TransactionController {
 
     @Autowired
@@ -34,6 +37,7 @@ public class TransactionController {
 
     @PostMapping("create")
     public  ResponseEntity<ApiResponse<Result>> create(@Valid @RequestBody TransactionReq dto){
+        log.info("new request comming with this mony : {}  type : {}",dto.getAmount(),dto.getType());
         Result result = TransactionService.create(dto);
         ApiResponse<Result> response = new ApiResponse<Result>(
                 "Transaction updated successfuly",
