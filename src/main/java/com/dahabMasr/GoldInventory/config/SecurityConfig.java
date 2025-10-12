@@ -2,6 +2,7 @@ package com.dahabMasr.GoldInventory.config;
 
 
 import com.dahabMasr.GoldInventory.security.CustomCustomerDetailsService;
+import com.dahabMasr.GoldInventory.security.JwtAuthEntryPoint;
 import com.dahabMasr.GoldInventory.security.JwtAuthenticationFilter;
 import com.dahabMasr.GoldInventory.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class SecurityConfig {
     CustomCustomerDetailsService customerDetailsService;
   @Autowired
     JwtAuthenticationFilter jwtAuthenticationFilter;
+  @Autowired
+    JwtAuthEntryPoint jwtAuthEntryPoint;
 
   @Bean
   public PasswordEncoder PasswordEncoder(){
@@ -53,6 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
