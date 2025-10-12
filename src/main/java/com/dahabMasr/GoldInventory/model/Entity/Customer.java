@@ -21,7 +21,7 @@ public class Customer {
     private  Long id;
     private  String name;
     private  String email;
-
+    private  String password;
     @OneToMany(mappedBy = "customer")
     @JsonManagedReference
     private List<Transaction> transactions;
