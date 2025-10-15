@@ -16,6 +16,7 @@ public class AuthController {
 
     @Autowired
     AuthenticationManager authenticationManager;
+
     @Autowired
     JwtUtil jwtUtil;
 

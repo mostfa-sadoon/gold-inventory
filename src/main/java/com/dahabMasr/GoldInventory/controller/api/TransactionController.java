@@ -24,6 +24,7 @@ import java.util.*;
 @lombok.extern.slf4j.Slf4j
 @RestController
 @Slf4j
+@RequestMapping("/api")
 public class TransactionController {
 
     @Autowired
