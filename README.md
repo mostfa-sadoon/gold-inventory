@@ -41,3 +41,41 @@ Admins can monitor all transactions and inventory levels in real time.
 
 ## 🧱 Project Structure
 
+src
+ └── main
+     ├── java
+     │   └── com.dahabMasr.GoldInventory
+     │       ├── config
+     │       │   └── SecurityConfig.java         # Configures multi-auth (Admin + Customer)
+     │       │
+     │       ├── controller
+     │       │   ├── api                         # REST APIs (JWT-secured for customers)
+     │       │   └── web                         # Web controllers (form login for admins)
+     │       │
+     │       ├── database.seeder                 # Seeds initial admin, customer, inventory data
+     │       │   ├── AdminSeeder.java
+     │       │   ├── CustomerSeeder.java
+     │       │   └── InventorySeeder.java
+     │       │
+     │       ├── exception                       # Centralized error handling
+     │       │   ├── GlobalExceptionHandler.java
+     │       │   ├── InventoryNotFoundException.java
+     │       │   └── TransactionNotFoundException.java
+     │       │
+     │       ├── model
+     │       │   ├── Dto
+     │       │   ├── Entity
+     │       │   ├── enums.inventory
+     │       │   └── Mapper
+     │       │
+     │       ├── repository
+     │       ├── security                        # Custom JWT + UserDetails logic
+     │       ├── service                         # Business logic layer
+     │       ├── utility                         # Helper and utility classes
+     │       └── GoldInventoryApplication.java   # Main Spring Boot entry point
+     │
+     └── resources
+         ├── application.properties              # Database & JWT configurations
+         └── templates (if using Thymeleaf)      # Admin login pages
+
+
