@@ -40,7 +40,7 @@ Admins can monitor all transactions and inventory levels in real time.
 ---
 
 ## 🧱 Project Structure
-
+```text
 src
  └── main
      ├── java
