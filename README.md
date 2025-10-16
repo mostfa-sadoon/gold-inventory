@@ -25,6 +25,12 @@ Admins can monitor all transactions and inventory levels in real time.
 
 ---
 
+## 🧑‍💼 Admin Dashboard Login
+
+**Login URL:** http://localhost:8080/admin/login  
+user_name : mostafa_sadoon
+password : 123456
+
 ## ⚙️ Tech Stack
 
 | Technology | Purpose |
